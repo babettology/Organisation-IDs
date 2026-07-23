@@ -78,6 +78,24 @@ def truncate_at_slash(name) -> str:
     return str(name).split("/", 1)[0].strip()
 
 
+def remove_parentheticals(name) -> str:
+    """Drop any text inside parentheses, wherever it appears
+    (e.g. 'World Food Programme (WFP)' -> 'World Food Programme',
+    'Org (Sub) Europe' -> 'Org Europe')."""
+    if pd.isna(name):
+        return name
+    cleaned = re.sub(r"\([^)]*\)", " ", str(name))
+    return re.sub(r"\s+", " ", cleaned).strip()
+
+
+def clean_org_name(name) -> str:
+    """Apply all pre-processing used before embedding/normalising/abbreviating
+    an org name: drop parenthetical asides, then truncate at the first '/'."""
+    if pd.isna(name):
+        return name
+    return truncate_at_slash(remove_parentheticals(name))
+
+
 class PseudoIdPipeline:
     """
     Encapsulates everything that used to be module-level globals, so the
@@ -207,9 +225,10 @@ class PseudoIdPipeline:
         `pseudo_id_created_at` columns to a copy of df.
 
         name_col      : required — column with the organisation name. Any
-                          text after a '/' is dropped before processing
-                          (e.g. "World Food Programme / WFP" is treated as
-                          "World Food Programme").
+                          text inside parentheses is dropped, then any text
+                          after a '/' is dropped (e.g. "World Food Programme
+                          (WFP) / Rome office" is treated as "World Food
+                          Programme").
         abbrev_col     : optional — pre-existing abbreviation to use as the ID
                           prefix instead of auto-abbreviating name_col.
         country_col    : optional — pre-existing country column; falls back
@@ -222,7 +241,7 @@ class PseudoIdPipeline:
         # Work on a slash-truncated version of the name for everything
         # downstream (embeddings, normalisation, country extraction, id).
         clean_name_col = "_clean_name"
-        df[clean_name_col] = df[name_col].apply(truncate_at_slash)
+        df[clean_name_col] = df[name_col].apply(clean_org_name)
         df[clean_name_col] = df[clean_name_col].apply(lambda x: str(x) if pd.notna(x) else x)
 
         unique_names = [str(n) for n in df[clean_name_col].dropna().unique()]

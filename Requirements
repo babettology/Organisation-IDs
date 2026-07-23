@@ -1,0 +1,7 @@
+streamlit
+pandas
+numpy
+torch
+sentence-transformers
+stopwordsiso
+flashtext

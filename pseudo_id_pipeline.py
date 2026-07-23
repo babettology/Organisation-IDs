@@ -223,8 +223,9 @@ class PseudoIdPipeline:
         # downstream (embeddings, normalisation, country extraction, id).
         clean_name_col = "_clean_name"
         df[clean_name_col] = df[name_col].apply(truncate_at_slash)
+        df[clean_name_col] = df[clean_name_col].apply(lambda x: str(x) if pd.notna(x) else x)
 
-        unique_names = df[clean_name_col].dropna().unique()
+        unique_names = [str(n) for n in df[clean_name_col].dropna().unique()]
         embeddings = self.model.encode(
             unique_names,
             batch_size=batch_size,

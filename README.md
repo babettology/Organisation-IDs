@@ -48,7 +48,7 @@ Pick whichever fits your setup:
 
 
 ```mermaid
-flowchart TD
+flowchart LR
     A["raw name"] --> B["clean_org_name()<br/><small>drop () and '/'</small>"]
     B --> C["embed()<br/><small>SentenceTransformer</small>"]
     B --> D["extract_country_from_name()"]
@@ -59,7 +59,6 @@ flowchart TD
     G -->|"else"| G2["normalise_name() → abbreviate()"]
     G1 --> H["pseudo_id = f'{prefix}-{lsh_code}'"]
     G2 --> H
-
     style A fill:#4d4d4d,stroke:#333,color:#ffffff
     style B fill:#4d4d4d,stroke:#333,color:#ffffff
     style C fill:#4d4d4d,stroke:#333,color:#ffffff

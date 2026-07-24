@@ -49,7 +49,7 @@ Pick whichever fits your setup:
 
 ```mermaid
 flowchart TD
-    A["raw name"] --> B["clean_org_name()<br/><small>drop (), truncate at '/'</small>"]
+    A["raw name"] --> B["clean_org_name()<br/><small>drop () and '/'</small>"]
     B --> C["embed()<br/><small>SentenceTransformer</small>"]
     B --> D["extract_country_from_name()"]
     C --> E["LSH hash<br/><small>n_bits</small>"]

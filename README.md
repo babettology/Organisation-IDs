@@ -59,7 +59,7 @@ flowchart TD
 
     E --> G["resolve_prefix()"]
     G -->|"all-caps?"| G1["keep as acronym"]
-    G -->|"else"| G2["normalize_name() → abbreviate()"]
+    G -->|"else"| G2["normalise_name() → abbreviate()"]
 
     G1 --> H["pseudo_id = f'{prefix}-{lsh_code}'"]
     G2 --> H

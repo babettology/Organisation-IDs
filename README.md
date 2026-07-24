@@ -50,21 +50,24 @@ Pick whichever fits your setup:
 ```mermaid
 flowchart TD
     A["raw name"] --> B["clean_org_name()<br/><small>drop (...) asides, truncate at '/'</small>"]
-
     B --> C["embed()<br/><small>SentenceTransformer</small>"]
     B --> D["extract_country_from_name()"]
-
     C --> E["LSH hash<br/><small>n_bits</small>"]
     D --> F["extracted_country<br/><small>metadata only</small>"]
-
     E --> G["resolve_prefix()"]
     G -->|"all-caps?"| G1["keep as acronym"]
     G -->|"else"| G2["normalise_name() → abbreviate()"]
-
     G1 --> H["pseudo_id = f'{prefix}-{lsh_code}'"]
     G2 --> H
 
-    style A fill:#f5f5f5,stroke:#999
-    style H fill:#e8f4ea,stroke:#4a8c5f,stroke-width:2px
-    style F fill:#f5f5f5,stroke:#999,stroke-dasharray: 4 3
+    style A fill:#4d4d4d,stroke:#333,color:#ffffff
+    style B fill:#4d4d4d,stroke:#333,color:#ffffff
+    style C fill:#4d4d4d,stroke:#333,color:#ffffff
+    style D fill:#4d4d4d,stroke:#333,color:#ffffff
+    style E fill:#4d4d4d,stroke:#333,color:#ffffff
+    style F fill:#4d4d4d,stroke:#333,color:#ffffff
+    style G fill:#4d4d4d,stroke:#333,color:#ffffff
+    style G1 fill:#4d4d4d,stroke:#333,color:#ffffff
+    style G2 fill:#4d4d4d,stroke:#333,color:#ffffff
+    style H fill:#4d4d4d,stroke:#333,color:#ffffff
 ```

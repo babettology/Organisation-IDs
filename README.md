@@ -44,3 +44,27 @@ Pick whichever fits your setup:
   original columns, and the app keeps the original name column pinned
   next to `pseudo_id` in both the on-screen preview and the row-lookup
   tool, so anyone can check the mapping back to source data at any time.
+
+
+
+```mermaid
+flowchart TD
+    A["raw name"] --> B["clean_org_name()<br/><small>drop (...) asides, truncate at '/'</small>"]
+
+    B --> C["embed()<br/><small>SentenceTransformer</small>"]
+    B --> D["extract_country_from_name()"]
+
+    C --> E["LSH hash<br/><small>n_bits</small>"]
+    D --> F["extracted_country<br/><small>metadata only</small>"]
+
+    E --> G["resolve_prefix()"]
+    G -->|"all-caps?"| G1["keep as acronym"]
+    G -->|"else"| G2["normalize_name() → abbreviate()"]
+
+    G1 --> H["pseudo_id = f'{prefix}-{lsh_code}'"]
+    G2 --> H
+
+    style A fill:#f5f5f5,stroke:#999
+    style H fill:#e8f4ea,stroke:#4a8c5f,stroke-width:2px
+    style F fill:#f5f5f5,stroke:#999,stroke-dasharray: 4 3
+```
